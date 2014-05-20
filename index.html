@@ -229,7 +229,7 @@ apt-get install varnish
             <h3>Varnish VCL</h3>
             <ul>
                 <li>vcl_recv: point d'entrée</li>
-                <li>vcl_hash: determine un hash pour la requête</li>
+                <li>vcl_hash: détermine un hash pour la requête</li>
                 <li>vcl_miss: pas de cache</li>
                 <li>vcl_hit:  cache disponible</li>
                 <li>vcl_pass: requête au backend (symfony)</li>
@@ -254,7 +254,7 @@ apt-get install varnish
             <h3>Grace mode</h3>
             <ul>
                 <li>Plusieurs requêtes sur une url</li>
-                <li>La première est envoyé au backend</li>
+                <li>La première est envoyée au backend</li>
                 <li>Les autres attendent</li>
             </ul>
         </section>
@@ -263,7 +263,7 @@ apt-get install varnish
             <h3>Grace mode</h3>
             <ul>
                 <li>Le temps d'attente peut être long si le backend est lent</li>
-                <li>Très fort trafique = monté en flêche du load</li>
+                <li>Très fort trafic = montée en flêche du load</li>
             </ul>
         </section>
 
@@ -276,7 +276,7 @@ apt-get install varnish
 
         <section data-state="jolistate">
             <h3>Grace mode</h3>
-            <p>Ne pas supprimer la réponse du cache si il n'est plus valide avant 10min</p>
+            <p>Garder la réponse pendant 10 minutes après qu'elle soit invalide.</p>
 <pre><code contenteditable>sub vcl_fetch {
     set beresp.grace = 10m;
 }
@@ -365,7 +365,7 @@ sub vcl_pass {
             <p>
                 <img src="images/fail1.gif" alt="" />
             </p>
-            <p>Les personnes connectés / non-connectés auront le même cache.</p>
+            <p>Les personnes connectées / non-connectées auront le même cache.</p>
         </section>
 
         <section data-state="jolistate">
@@ -427,7 +427,7 @@ sub vcl_pass {
         </section>
 
         <section data-state="jolistate">
-            <h4>Vary de la response sur le Hash</h4>
+            <h4>Vary de la réponse sur le Hash</h4>
             <p>
                 Problèmes :
             </p>
@@ -441,7 +441,7 @@ sub vcl_pass {
             <h4>Faire une nouvelle requête avant l'original</h4>
             <ul>
                 <li>Client -> requête GET -> Reverse proxy</li>
-                <li>Reverse Proxy -> requête pour récuperer le hash -> Backend</li>
+                <li>Reverse Proxy -> requête pour récupérer le hash -> Backend</li>
                 <li>Backend -> réponse avec le hash -> Reverse Proxy</li>
                 <li>Reverse Proxy -> requête GET du client + ajout du hash -> Backend</li>
                 <li>Backend -> réponse -> reverse proxy -> réponse -> client</li>
@@ -452,7 +452,7 @@ sub vcl_pass {
             <h4>La seconde fois ?</h4>
             <ul>
                 <li>Client -> requête GET -> Reverse proxy</li>
-                <li>Reverse Proxy -> requête pour récuperer le hash -> Backend</li>
+                <li>Reverse Proxy -> requête pour récupérer le hash -> Backend</li>
                 <li>Backend -> réponse avec le hash -> Reverse Proxy</li>
                 <li>Reverse Proxy -> requête GET du client + ajout du hash -> Cache</li>
                 <li>Cache -> réponse -> client</li>
@@ -463,7 +463,7 @@ sub vcl_pass {
             <h4>On peut aussi mettre en cache le hash (avec un Vary sur la session)</h4>
             <ul>
                 <li>Client -> requête GET -> Reverse proxy</li>
-                <li>Reverse Proxy -> requête pour récuperer le hash -> Cache</li>
+                <li>Reverse Proxy -> requête pour récupérer le hash -> Cache</li>
                 <li>Cache -> réponse avec le hash -> Reverse Proxy</li>
                 <li>Reverse Proxy -> requête GET du client + ajout du hash -> Cache</li>
                 <li>Cache -> réponse -> client</li>
