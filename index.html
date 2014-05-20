@@ -167,7 +167,7 @@ if ($response->isNotModified($request)) {
         <section>
             <h3>Symfony Reverse Proxy</h3>
             <p>
-                Suffisant, mais pas trés performant (~20-40ms).
+                Suffisant, mais pas très performant (~20-40ms).
             </p>
         </section>
 
@@ -190,7 +190,7 @@ apt-get install varnish
             <ul>
                 <li>Rien n'est mis en cache</li>
                 <li>Tout est mis en cache</li>
-                <li>Cache mélangé entre utilisateur</li>
+                <li>Cache mélangé entre utilisateurs</li>
             </ul>
         </section>
 
@@ -213,8 +213,8 @@ apt-get install varnish
             <h3>Comportement par défaut de Varnish</h3>
             <ul>
                 <li>Cache uniquement sur les requêtes GET / HEAD</li>
-                <li>Cookie = Pas de cache</li>
-                <li>Set-Cookie = Pas de cache</li>
+                <li>Cookie = pas de cache</li>
+                <li>Set-Cookie = pas de cache</li>
                 <li>"Cache-Control: no-cache" = cache</li>
                 <li>"Cache-Control: private" = cache</li>
             </ul>
@@ -234,26 +234,26 @@ apt-get install varnish
                 <li>vcl_hit:  cache disponible</li>
                 <li>vcl_pass: requête au backend (symfony)</li>
                 <li>vcl_fetch: réponse disponible</li>
-                <li>vcl_deliver: délive la réponse au client (cache ou non)</li>
+                <li>vcl_deliver: délivre la réponse au client (cache ou non)</li>
             </ul>
         </section>
 
         <section>
-            <h2>Quelques astuces</h2>
+            <h3>Un peu plus loin avec varnish</h3>
         </section>
 
         <section>
             <h3>Cache busting</h3>
             <ul>
                 <li>Mettre un temps de vie très long sur les assets</li>
-                <li>Ajouter "?version" aux liens des assets (git sha ?)</li>
+                <li>Ajouter "?version" aux liens des assets</li>
             </ul>
         </section>
 
         <section>
             <h3>Grace mode</h3>
             <ul>
-                <li>Plusieurs requêtes sur une url (miss)</li>
+                <li>Plusieurs requêtes sur une url</li>
                 <li>La première est envoyé au backend</li>
                 <li>Les autres attendent</li>
             </ul>
@@ -370,7 +370,7 @@ sub vcl_pass {
 
         <section>
             <h2>2. Vary sur le cookie</h2>
-            <p>Marche uniquement si on force un return (lookup);</p>
+            <p>Marche uniquement si on force un `return (lookup);`</p>
 <pre><code contenteditable>$response->setVary('Cookie');
 </code></pre>
         </section>
@@ -433,7 +433,7 @@ sub vcl_pass {
             </p>
             <ul>
                 <li>Le Hash n'est pas disponible tant que l'application n'est pas appelé</li>
-                <li>Le Hash ne peux pas être envoyé par le client (pour des raisons évidentes de sécurité)</li>
+                <li>Le Hash ne peux pas être envoyé par le client</li>
             </ul>
         </section>
 
