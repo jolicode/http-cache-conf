@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>HTTP Cache</title>
+
+    <meta name="description" content="HTTP Cache">
+    <meta name="author" content="Joel Wurtz">
+
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="css/reveal.min.css">
+    <link rel="stylesheet" href="css/theme/jolicode.css" id="theme">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+        document.write('<link rel="stylesheet" href="css/print/' + ( window.location.search.match(/print-pdf/gi) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">');
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<div class="reveal">
+
+<!-- Any section element inside of this container is displayed as a slide -->
+    <div class="slides">
+        <section data-state="jolistate">
+            <h1>HTTP Cache</h1>
+            <h3>AFSY - sfPot Mai 2014</h3>
+            <p>
+                Joel Wurtz / <a href="http://twitter.com/joelwurtz">@joelwurtz</a></small>
+            </p>
+        </section>
+
+        <section data-state="jolistate">
+            <a class="" href="http://jolicode.com">
+                <img src="./lib/font/logo-fond-noir.svg" alt="JoliCode" />
+            </a>
+        </section>
+
+        <section data-state="jolistate">
+            <h2>Cache</h2>
+        </section>
+
+
+        <section data-state="jolistate">
+            <h3>Cache</h3>
+
+            <p>
+                Un cache réduit le coût des ressources.
+            </p>
+        </section>
+
+
+        <section data-state="jolistate">
+            <h2>Faux</h2>
+        </section>
+
+
+        <section data-state="jolistate">
+            <h3>Cache</h3>
+            <p>
+                Un cache <strong>transforme</strong> le coût des ressources.
+            </p>
+            <p>
+                On réduit le calcul mais on augmente le stockage.
+            </p>
+        </section>
+
+        <section data-state="jolistate">
+            <h2>HTTP Cache</h2>
+        </section>
+
+        <section data-state="jolistate">
+            <h2>Reverse Proxy</h2>
+            <img src="images/http-cache.svg" alt="" style="background-color: white; height: 400px;" />
+        </section>
+
+        <section data-state="jolistate">
+            <h3>Cache control</h3>
+            <ul>
+                <li>Cache-Control: public</li>
+                <li>Cache-Control: private</li>
+                <li>Cache-Control: max-age=3600</li>
+                <li>Cache-Control: s-maxage=900</li>
+                <li>Expires: Thu, 22 May 2014 10:00:00 GMT</li>
+            </ul>
+        </section>
+
+        <section data-state="jolistate">
+            <h3>Cache validation</h3>
+            <p>Response</p>
+            <ul>
+                <li>Last-Modified: Thu, 22 May 2014 10:00:00 GMT</li>
+                <li>ETag: 1121029380192</li>
+            </ul>
+        </section>
+
+        <section data-state="jolistate">
+            <h3>Cache validation</h3>
+            <p>Request</p>
+            <ul>
+                <li>If-Modified-Since: Thu, 22 May 2014 10:00:00 GMT</li>
+                <li>If-None-Match: 1121029380192</li>
+            </ul>
+        </section>
+
+        <section data-state="jolistate">
+            <h3>Vary</h3>
+            <ul>
+                <li>Vary: Accept-Encoding, User-Agent</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>HTTP Cache + Symfony = <3</h3>
+            <p>
+                Support de la norme HTTP
+            </p>
+        </section>
+
+        <section>
+            <h2>Symfony</h2>
+<pre><code contenteditable>$response->setPublic();
+$response->setPrivate();
+$response->setMaxAge(600);
+$response->setSharedMaxAge(600);
+$response->setExpires(new \DateTime());
+</code></pre>
+        </section>
+
+        <section>
+            <h2>Symfony</h2>
+<pre><code contenteditable>
+$response->setLastModified(new \DateTime());
+// Ou
+$response->setETag("1121029380192");
+
+if ($response->isNotModified($request)) {
+    return $response;
+}
+</code></pre>
+        </section>
+        <section>
+            <h2>Symfony</h2>
+<pre><code contenteditable>$response->setVary('User-Agent');
+</code></pre>
+        </section>
+
+        <section>
+            <h3>Symfony Reverse Proxy</h3>
+<pre><code contenteditable>$kernel = new AppCache($kernel);
+</code></pre>
+        </section>
+
+        <section>
+            <h3>Symfony Reverse Proxy</h3>
+            <p>
+                Suffisant, mais pas trés performant (~20-40ms).
+            </p>
+        </section>
+
+        <section>
+            <h3>Varnish + Symfony</h3>
+            <blockquote cite="http://symfony.com/fr/doc/current/book/http_cache.html#symfony2-reverse-proxy">
+                La bonne nouvelle est qu'il est très simple de passer d'un proxy à un autre sans qu'aucune modification ne soit nécessaire dans le code.
+            </blockquote>
+        </section>
+
+        <section>
+            <h3>Varnish</h3>
+<pre><code contenteditable>apt-get update
+apt-get install varnish
+</code></pre>
+        </section>
+
+        <section>
+            <h3>WTF? WTF? WTF?!</h3>
+            <ul>
+                <li>Rien n'est mis en cache</li>
+                <li>Tout est mis en cache</li>
+                <li>Cache mélangé entre utilisateur</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>Varnish != Symfony2 Reverse Proxy</h3>
+            <p>
+                <a href="http://varnish-cache.org/docs">RTFM!</a>
+            </p>
+        </section>
+
+        <section>
+            <h3>Varnish</h3>
+            <p>Norme HTTP ?</p>
+            <p>
+                <img src="images/fuck.gif" alt="" />
+            </p>
+        </section>
+
+        <section>
+            <h3>Comportement par défaut de Varnish</h3>
+            <ul>
+                <li>Cache uniquement sur les requêtes GET / HEAD</li>
+                <li>Cookie = Pas de cache</li>
+                <li>Set-Cookie = Pas de cache</li>
+                <li>"Cache-Control: no-cache" = cache</li>
+                <li>"Cache-Control: private" = cache</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>Varnish VCL</h3>
+            <a href="images/varnish-flow.png"><img src="images/varnish-flow.png" alt="" /></a>
+        </section>
+
+        <section>
+            <h3>Varnish VCL</h3>
+            <ul>
+                <li>vcl_recv: point d'entrée</li>
+                <li>vcl_hash: determine un hash pour la requête</li>
+                <li>vcl_miss: pas de cache</li>
+                <li>vcl_hit:  cache disponible</li>
+                <li>vcl_pass: requête au backend (symfony)</li>
+                <li>vcl_fetch: réponse disponible</li>
+                <li>vcl_deliver: délive la réponse au client (cache ou non)</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Quelques astuces</h2>
+        </section>
+
+        <section>
+            <h3>Cache busting</h3>
+            <ul>
+                <li>Mettre un temps de vie très long sur les assets</li>
+                <li>Ajouter "?version" aux liens des assets (git sha ?)</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>Grace mode</h3>
+            <ul>
+                <li>Plusieurs requêtes sur une url (miss)</li>
+                <li>La première est envoyé au backend</li>
+                <li>Les autres attendent</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>Grace mode</h3>
+            <ul>
+                <li>Le temps d'attente peut être long si le backend est lent</li>
+                <li>Très fort trafique = monté en flêche du load</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>Grace mode</h3>
+            <p>
+                Au lieu d'attendre le nouveau cache on peut envoyer l'ancien = Grace mode
+            </p>
+        </section>
+
+        <section>
+            <h3>Grace mode</h3>
+            <p>Ne pas supprimer la réponse du cache si il n'est plus valide avant 10min</p>
+<pre><code contenteditable>sub vcl_fetch {
+    set beresp.grace = 10m;
+}
+</code></pre>
+        </section>
+
+        <section>
+            <h3>Grace mode</h3>
+            <p>On peut utiliser l'ancien cache pour cette requête pendant 10 min</p>
+<pre><code contenteditable>sub vcl_recv {
+    set req.grace = 10m;
+}
+</code></pre>
+        </section>
+
+        <section>
+            <h3>Saint mode</h3>
+            <p>
+                Objectif: servir du cache si on obtient une erreur 500
+            </p>
+        </section>
+
+        <section>
+            <h3>Saint mode</h3>
+            <ul>
+                <li>Met <b>une url</b> pour <b>un backend</b> en blacklist pendant <b>X temps</b></li>
+                <li>Va essayer d'autre backend d'abord</li>
+                <li>Si aucun disponible envoie l'ancien cache</li>
+                <li>Toujours besoin de dire qu'une requête est disponible pendant plus de temps</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>Saint mode</h3>
+<pre><code contenteditable>sub vcl_fetch {
+    if (beresp.status == 500) {
+        set beresp.saintmode = 30s;
+        return(restart);
+    }
+    set beresp.grace = 5m;
+}
+</code></pre>
+        </section>
+
+        <section data-state="jolistate">
+            <h2>Varnish + Authentification</h2>
+        </section>
+
+
+        <section data-state="jolistate">
+            <h2>Rappel</h2>
+            <p>Cookie = pas de cache</p>
+        </section>
+
+        <section>
+            <h2>1. Mettre en cache avec des cookies</h2>
+<pre><code contenteditable>sub vcl_recv {
+    ...
+
+    return (lookup);
+}
+</code></pre>
+        </section>
+
+        <section>
+            <h2>1. Mettre en cache avec des cookies</h2>
+<pre><code contenteditable>sub vcl_recv {
+    set req.http.X-TempCookie = req.http.cookie;
+    unset req.http.cookie;
+}
+sub vcl_miss {
+    if (bereq.http.X-TempCookie) {
+        set bereq.http.cookie = bereq.http.X-TempCookie;
+    }
+}
+sub vcl_pass {
+    if (bereq.http.X-TempCookie) {
+       set bereq.http.cookie = bereq.http.X-TempCookie;
+    }
+}
+</code></pre>
+        </section>
+
+        <section>
+            <h2>Fail...</h2>
+            <p>
+                <img src="images/fail1.gif" alt="" />
+            </p>
+            <p>Les personnes connectés / non-connectés auront le même cache.</p>
+        </section>
+
+        <section>
+            <h2>2. Vary sur le cookie</h2>
+            <p>Marche uniquement si on force un return (lookup);</p>
+<pre><code contenteditable>$response->setVary('Cookie');
+</code></pre>
+        </section>
+
+        <section>
+            <h2>Fail...</h2>
+            <p>
+                <img src="images/fail2.gif" alt="" />
+            </p>
+            <p>Google analytics ? Cache différent pour chaque appel.</p>
+        </section>
+
+        <section>
+            <h2>3. Extraction de la session</h2>
+<pre><code contenteditable>sub vcl_recv {
+    set req.http.X-Session-Id = ";" + req.http.cookie;
+    set req.http.X-Session-Id = regsuball(req.http.X-Session-Id, "; +", ";");
+    set req.http.X-Session-Id = regsuball(req.http.X-Session-Id, ";(PHPSESSID)=", "; \1=");
+    set req.http.X-Session-Id = regsuball(req.http.X-Session-Id, ";[^ ][^;]*", "");
+    set req.http.X-Session-Id = regsuball(req.http.X-Session-Id, "^[; ]+|[; ]+$", "");
+}
+</code></pre>
+<pre><code contenteditable>$reponse->setVary('X-SessionId')
+</code></pre>
+        </section>
+
+        <section>
+            <h2>Fail...</h2>
+            <p>
+                <img src="images/fail3.gif" alt="" />
+            </p>
+            <p>Un cache par utilisateur, niveau performance on a vu mieux.</p>
+        </section>
+
+        <section>
+            <h2>Prenons du recul...</h2>
+        </section>
+
+        <section>
+            <h4>Qu'est ce qui différencie une réponse dans votre application ?</h4>
+            <ul>
+                <li>Différent pour chaque utilisateur = pas de cache (désolé ...)</li>
+                <li>Différent si on est authentifié ou non</li>
+                <li>Différent selon le rôle</li>
+                <li>...</li>
+            </ul>
+        </section>
+
+        <section>
+            <h4>Hash et User Context</h4>
+            <p>
+                Objectif : Générer un hash unique pour chaque "catégorie" d'utilisateur.
+            </p>
+        </section>
+
+        <section>
+            <h4>Vary de la response sur le Hash</h4>
+            <p>
+                Problèmes :
+            </p>
+            <ul>
+                <li>Le Hash n'est pas disponible tant que l'application n'est pas appelé</li>
+                <li>Le Hash ne peux pas être envoyé par le client (pour des raisons évidentes de sécurité)</li>
+            </ul>
+        </section>
+
+        <section>
+            <h4>Faire une nouvelle requête avant l'original</h4>
+            <ul>
+                <li>Client -> requête GET -> Reverse proxy</li>
+                <li>Reverse Proxy -> requête pour récuperer le hash -> Backend</li>
+                <li>Backend -> réponse avec le hash -> Reverse Proxy</li>
+                <li>Reverse Proxy -> requête GET du client + ajout du hash -> Backend</li>
+                <li>Backend -> réponse -> reverse proxy -> réponse -> client</li>
+            </ul>
+        </section>
+
+        <section>
+            <h4>La seconde fois ?</h4>
+            <ul>
+                <li>Client -> requête GET -> Reverse proxy</li>
+                <li>Reverse Proxy -> requête pour récuperer le hash -> Backend</li>
+                <li>Backend -> réponse avec le hash -> Reverse Proxy</li>
+                <li>Reverse Proxy -> requête GET du client + ajout du hash -> Cache</li>
+                <li>Cache -> réponse -> client</li>
+            </ul>
+        </section>
+
+        <section>
+            <h4>On peut aussi mettre en cache le hash (avec un Vary sur la session)</h4>
+            <ul>
+                <li>Client -> requête GET -> Reverse proxy</li>
+                <li>Reverse Proxy -> requête pour récuperer le hash -> Cache</li>
+                <li>Cache -> réponse avec le hash -> Reverse Proxy</li>
+                <li>Reverse Proxy -> requête GET du client + ajout du hash -> Cache</li>
+                <li>Cache -> réponse -> client</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Win !</h2>
+        </section>
+
+        <section>
+            <h2>Avec Varnish</h2>
+            <p>
+                <a href="https://github.com/FriendsOfSymfony/FOSHttpCache/blob/master/doc/varnish-configuration.md#user-context">Voir documentation FOSHttpCache</a>
+            </p>
+<pre style="font-size: 13px;"><code contenteditable>sub vcl_recv {
+    // Handle the original request: send a HEAD request to retrieve the user hash
+    if (req.restarts == 0 && req.http.cookie && (req.request == "GET" || req.request == "HEAD")) {
+        set req.http.x-original-url     = req.url;
+        set req.http.x-original-request = req.request;
+
+        # Retrieve a unique session id from the cookie
+        set req.http.x-session-id = req.http.cookie;
+
+        set req.url     = "/generate_hash.php";
+        set req.request = "HEAD";
+
+        return (lookup);
+    }
+
+    // After the HEAD request, reset the request to the original one, which
+    // will be restarted in vcl_deliver.
+    if (req.restarts > 0 && req.http.X-Original-Method) {
+        set req.request = req.http.x-original-method;
+        set req.url     = req.http.x-original-url;
+
+        unset req.http.req.http.x-original-method;
+        unset req.http.req.http.x-original-url;
+
+        return (lookup);
+    }
+}
+
+sub vcl_miss {
+    // When creating backend request, varnish force GET method (bug ?)
+    set bereq.request = req.request;
+}
+
+sub vcl_deliver {
+    // After receiving the HEAD response, copy the hash to the original request
+    // and restart that.
+    if (req.request == "HEAD" && resp.http.x-user-context-hash) {
+        set req.http.x-user-context-hash = resp.http.x-user-context-hash;
+
+        return (restart);
+    }
+}
+</code></pre>
+        </section>
+
+        <section>
+            <h2>Avec PHP/Symfony2</h2>
+            <ul>
+                <li>Idée inspirée de <a href="https://doc.ez.no/display/EZP/Using+Varnish">ezPublish</a></li>
+                <li><a href="https://github.com/FriendsOfSymfony/FOSHttpCache">Documentation et classes de base : FOSHttpCache</a></li>
+                <li><a href="https://github.com/ddeboer/FOSHttpCacheBundle">Implémentation en cours sur FOSHttpCacheBundle</a></li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Merci ! Questions ?</h2>
+            <p><a href="http://twitter.com/joelwurtz">Joel Wurtz</a></p>
+        </section>
+    </div>
+
+</div>
+
+<footer class="joli">
+    HTTP Cache - Afsy sfPot Mai 2014 - Joel Wurtz - <img src="lib/font/logo-fond-noir.svg" style="height:1em; vertical-align: text-bottom;" />
+</footer>
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.min.js"></script>
+
+<script>
+
+    // Full list of configuration options available here:
+    // https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'none', // default/cube/page/concave/zoom/linear/fade/none
+
+        // Parallax scrolling
+        // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+        // parallaxBackgroundSize: '2100px 900px',
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+            { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+            { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+            { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+            { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ]
+    });
+
+</script>
+
+</body>
+</html>
