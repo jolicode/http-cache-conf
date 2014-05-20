@@ -423,9 +423,10 @@ sub vcl_pass {
 
         <section data-state="jolistate">
             <h4>Hash et User Context</h4>
-            <p>
-                Objectif : Générer un hash unique pour chaque "catégorie" d'utilisateur.
-            </p>
+            <ol>
+                <li>Générer un hash unique pour chaque "catégorie" d'utilisateur.</li>
+                <li>Faire varier la réponse selon ce hash</li>
+            </ol>
         </section>
 
         <section data-state="jolistate">
@@ -441,35 +442,35 @@ sub vcl_pass {
 
         <section data-state="jolistate">
             <h4>Faire une nouvelle requête avant l'original</h4>
-            <ul>
+            <ol>
                 <li>Client -> requête GET -> Reverse proxy</li>
                 <li>Reverse Proxy -> requête pour récupérer le hash -> Backend</li>
                 <li>Backend -> réponse avec le hash -> Reverse Proxy</li>
                 <li>Reverse Proxy -> requête GET du client + ajout du hash -> Backend</li>
                 <li>Backend -> réponse -> reverse proxy -> réponse -> client</li>
-            </ul>
+            </ol>
         </section>
 
         <section data-state="jolistate">
             <h4>La seconde fois ?</h4>
-            <ul>
+            <ol>
                 <li>Client -> requête GET -> Reverse proxy</li>
                 <li>Reverse Proxy -> requête pour récupérer le hash -> Backend</li>
                 <li>Backend -> réponse avec le hash -> Reverse Proxy</li>
                 <li>Reverse Proxy -> requête GET du client + ajout du hash -> Cache</li>
                 <li>Cache -> réponse -> client</li>
-            </ul>
+            </ol>
         </section>
 
         <section data-state="jolistate">
             <h4>On peut aussi mettre en cache le hash</h4>
-            <ul>
+            <ol>
                 <li>Client -> requête GET -> Reverse proxy</li>
                 <li>Reverse Proxy -> requête pour récupérer le hash -> Cache</li>
                 <li>Cache -> réponse avec le hash -> Reverse Proxy</li>
                 <li>Reverse Proxy -> requête GET du client + ajout du hash -> Cache</li>
                 <li>Cache -> réponse -> client</li>
-            </ul>
+            </ol>
         </section>
 
         <section data-state="jolistate">
