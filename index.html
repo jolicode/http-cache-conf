@@ -123,14 +123,14 @@
             </ul>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h3>HTTP Cache + Symfony = <3</h3>
             <p>
                 Support de la norme HTTP
             </p>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h2>Symfony</h2>
 <pre><code contenteditable>$response->setPublic();
 $response->setPrivate();
@@ -140,7 +140,7 @@ $response->setExpires(new \DateTime());
 </code></pre>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h2>Symfony</h2>
 <pre><code contenteditable>
 $response->setLastModified(new \DateTime());
@@ -152,40 +152,40 @@ if ($response->isNotModified($request)) {
 }
 </code></pre>
         </section>
-        <section>
+        <section data-state="jolistate">
             <h2>Symfony</h2>
 <pre><code contenteditable>$response->setVary('User-Agent');
 </code></pre>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h3>Symfony Reverse Proxy</h3>
 <pre><code contenteditable>$kernel = new AppCache($kernel);
 </code></pre>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h3>Symfony Reverse Proxy</h3>
             <p>
                 Suffisant, mais pas très performant (~20-40ms).
             </p>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h3>Varnish + Symfony</h3>
             <blockquote cite="http://symfony.com/fr/doc/current/book/http_cache.html#symfony2-reverse-proxy">
                 La bonne nouvelle est qu'il est très simple de passer d'un proxy à un autre sans qu'aucune modification ne soit nécessaire dans le code.
             </blockquote>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h3>Varnish</h3>
 <pre><code contenteditable>apt-get update
 apt-get install varnish
 </code></pre>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h3>WTF? WTF? WTF?!</h3>
             <ul>
                 <li>Rien n'est mis en cache</li>
@@ -194,14 +194,14 @@ apt-get install varnish
             </ul>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h3>Varnish != Symfony2 Reverse Proxy</h3>
             <p>
                 <a href="http://varnish-cache.org/docs">RTFM!</a>
             </p>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h3>Varnish</h3>
             <p>Norme HTTP ?</p>
             <p>
@@ -209,7 +209,7 @@ apt-get install varnish
             </p>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h3>Comportement par défaut de Varnish</h3>
             <ul>
                 <li>Cache uniquement sur les requêtes GET / HEAD</li>
@@ -220,12 +220,12 @@ apt-get install varnish
             </ul>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h3>Varnish VCL</h3>
             <a href="images/varnish-flow.png"><img src="images/varnish-flow.png" alt="" /></a>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h3>Varnish VCL</h3>
             <ul>
                 <li>vcl_recv: point d'entrée</li>
@@ -238,11 +238,11 @@ apt-get install varnish
             </ul>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h3>Un peu plus loin avec varnish</h3>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h3>Cache busting</h3>
             <ul>
                 <li>Mettre un temps de vie très long sur les assets</li>
@@ -250,7 +250,7 @@ apt-get install varnish
             </ul>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h3>Grace mode</h3>
             <ul>
                 <li>Plusieurs requêtes sur une url</li>
@@ -259,7 +259,7 @@ apt-get install varnish
             </ul>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h3>Grace mode</h3>
             <ul>
                 <li>Le temps d'attente peut être long si le backend est lent</li>
@@ -267,14 +267,14 @@ apt-get install varnish
             </ul>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h3>Grace mode</h3>
             <p>
                 Au lieu d'attendre le nouveau cache on peut envoyer l'ancien = Grace mode
             </p>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h3>Grace mode</h3>
             <p>Ne pas supprimer la réponse du cache si il n'est plus valide avant 10min</p>
 <pre><code contenteditable>sub vcl_fetch {
@@ -283,7 +283,7 @@ apt-get install varnish
 </code></pre>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h3>Grace mode</h3>
             <p>On peut utiliser l'ancien cache pour cette requête pendant 10 min</p>
 <pre><code contenteditable>sub vcl_recv {
@@ -292,14 +292,14 @@ apt-get install varnish
 </code></pre>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h3>Saint mode</h3>
             <p>
                 Objectif: servir du cache si on obtient une erreur 500
             </p>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h3>Saint mode</h3>
             <ul>
                 <li>Met <b>une url</b> pour <b>un backend</b> en blacklist pendant <b>X temps</b></li>
@@ -309,7 +309,7 @@ apt-get install varnish
             </ul>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h3>Saint mode</h3>
 <pre><code contenteditable>sub vcl_fetch {
     if (beresp.status == 500) {
@@ -331,7 +331,7 @@ apt-get install varnish
             <p>Cookie = pas de cache</p>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h2>1. Mettre en cache avec des cookies</h2>
 <pre><code contenteditable>sub vcl_recv {
     ...
@@ -341,7 +341,7 @@ apt-get install varnish
 </code></pre>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h2>1. Mettre en cache avec des cookies</h2>
 <pre><code contenteditable>sub vcl_recv {
     set req.http.X-TempCookie = req.http.cookie;
@@ -360,7 +360,7 @@ sub vcl_pass {
 </code></pre>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h2>Fail...</h2>
             <p>
                 <img src="images/fail1.gif" alt="" />
@@ -368,14 +368,14 @@ sub vcl_pass {
             <p>Les personnes connectés / non-connectés auront le même cache.</p>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h2>2. Vary sur le cookie</h2>
             <p>Marche uniquement si on force un `return (lookup);`</p>
 <pre><code contenteditable>$response->setVary('Cookie');
 </code></pre>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h2>Fail...</h2>
             <p>
                 <img src="images/fail2.gif" alt="" />
@@ -383,7 +383,7 @@ sub vcl_pass {
             <p>Google analytics ? Cache différent pour chaque appel.</p>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h2>3. Extraction de la session</h2>
 <pre><code contenteditable>sub vcl_recv {
     set req.http.X-Session-Id = ";" + req.http.cookie;
@@ -397,7 +397,7 @@ sub vcl_pass {
 </code></pre>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h2>Fail...</h2>
             <p>
                 <img src="images/fail3.gif" alt="" />
@@ -405,11 +405,11 @@ sub vcl_pass {
             <p>Un cache par utilisateur, niveau performance on a vu mieux.</p>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h2>Prenons du recul...</h2>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h4>Qu'est ce qui différencie une réponse dans votre application ?</h4>
             <ul>
                 <li>Différent pour chaque utilisateur = pas de cache (désolé ...)</li>
@@ -419,14 +419,14 @@ sub vcl_pass {
             </ul>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h4>Hash et User Context</h4>
             <p>
                 Objectif : Générer un hash unique pour chaque "catégorie" d'utilisateur.
             </p>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h4>Vary de la response sur le Hash</h4>
             <p>
                 Problèmes :
@@ -437,7 +437,7 @@ sub vcl_pass {
             </ul>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h4>Faire une nouvelle requête avant l'original</h4>
             <ul>
                 <li>Client -> requête GET -> Reverse proxy</li>
@@ -448,7 +448,7 @@ sub vcl_pass {
             </ul>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h4>La seconde fois ?</h4>
             <ul>
                 <li>Client -> requête GET -> Reverse proxy</li>
@@ -459,7 +459,7 @@ sub vcl_pass {
             </ul>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h4>On peut aussi mettre en cache le hash (avec un Vary sur la session)</h4>
             <ul>
                 <li>Client -> requête GET -> Reverse proxy</li>
@@ -470,11 +470,11 @@ sub vcl_pass {
             </ul>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h2>Win !</h2>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h2>Avec Varnish</h2>
             <p>
                 <a href="https://github.com/FriendsOfSymfony/FOSHttpCache/blob/master/doc/varnish-configuration.md#user-context">Voir documentation FOSHttpCache</a>
@@ -524,7 +524,7 @@ sub vcl_deliver {
 </code></pre>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h2>Avec PHP/Symfony2</h2>
             <ul>
                 <li>Idée inspirée de <a href="https://doc.ez.no/display/EZP/Using+Varnish">ezPublish</a></li>
@@ -533,7 +533,7 @@ sub vcl_deliver {
             </ul>
         </section>
 
-        <section>
+        <section data-state="jolistate">
             <h2>Merci ! Questions ?</h2>
             <p><a href="http://twitter.com/joelwurtz">Joel Wurtz</a></p>
         </section>
